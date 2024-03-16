@@ -40,7 +40,7 @@ ganache-cli
 
 新的 RPC URL：http://127.0.0.1:8545（Geth地址）
 
-    RPC URL：http://127.0.0.1:8545（Ganache地址）
+    RPC URL：http://127.0.0.1:7545（Ganache地址）
     
 链ID：1337
 
