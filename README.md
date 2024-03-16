@@ -16,26 +16,34 @@ Metamask 浏览器扩展程序
 安装 Node.js：从 Node.js 官网 下载并安装 Node.js。
 
 安装 Truffle 和 Ganache CLI：使用 npm 全局安装 Truffle 和 Ganache CLI：
+
 npm install -g truffle
+
 npm install -g ganache-cli
+
 安装 Metamask：从 Metamask 官网 下载并安装 Metamask 浏览器扩展程序。
 
 配置项目以进行开发
 克隆仓库：使用以下命令克隆此仓库：
+
 git clone https://github.com/yanzhenf/DappVoting.git
 cd dVoting
 
 运行本地以太坊区块链：使用 Ganache CLI 启动本地以太坊区块链：
 ganache-cli
 配置 Metamask：在浏览器中配置 Metamask 扩展程序，使用以下详细信息：
+
 新的 RPC URL：http://127.0.0.1:8545（Geth地址）
     RPC URL：http://127.0.0.1:8545（Ganache地址）
 链ID：1337
-使用 Ganache CLI 的私钥导入账户到 Metamask 扩展程序。
+使用 Ganache或者Geth的私钥导入账户到 Metamask 扩展程序。
 
 部署智能合约：在 dVoting 目录中使用 Truffle 部署智能合约：
+
 truffle migrate
+
 启动开发服务器：进入 client 目录，安装依赖并启动开发服务器：
+
 cd client
 
 npm install
