@@ -32,11 +32,11 @@ npm install -g truffle
 
 配置项目以进行开发 克隆这个仓库
 
-git clone https://github.com/arlbibek/dVoting.git 
+git clone https://github.com/yanzhenf/DappVoting.git
 
 cd dVoting
 
- 运行本地以太坊区块链
+运行本地以太坊区块链
 
 ganache-cli 注意：不要关闭ganache-cli（区块链网络需要一直运行）
 
@@ -54,5 +54,8 @@ ganache-cli 注意：不要关闭ganache-cli（区块链网络需要一直运行
 
 启动开发服务器（前端）
 
-cd client npm install npm start 如果在npm install期间遇到错误，请注意您可能需要从learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist（这是X64的直接下载链接：aka.ms/vs/17/release/vc_redist.x64.exe）安装Microsoft Visual C++ Redistributable packages。
+cd client
+npm install
+npm start 
+如果在npm install期间遇到错误，请注意您可能需要从learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist（这是X64的直接下载链接：aka.ms/vs/17/release/vc_redist.x64.exe）安装Microsoft Visual C++ Redistributable packages。
 
