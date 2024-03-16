@@ -1,61 +1,63 @@
-去中心化投票（dVoting） 基于以太坊区块链技术的去中心化投票系统。
+dVoting - 去中心化投票系统
+dVoting 是基于以太坊区块链技术的去中心化投票系统，旨在提供安全、透明和可验证的选举过程。以下是系统的工作流程和设置开发环境的详细说明。
 
-系统工作流程 关于应用程序基本工作流程的简要说明。
+系统工作流程
+管理员启动系统：管理员在区块链网络（EVM）上启动/部署系统，并创建选举实例，包括选民投票的候选人。
 
-管理员将通过在区块链网络（EVM）上启动/部署系统来创建投票实例，然后创建选举实例并使用填写的选举详情（包括选民投票的候选人）开始选举。
+选民注册：可能的选民连接到同一区块链网络以注册成为选民。注册信息将显示在管理员面板上，管理员审核并批准有效的注册用户。
 
-然后，可能的选民连接到同一区块链网络以注册成为选民。一旦用户成功注册，他们的相关详细信息将被发送/显示在管理员面板上（即验证页面）。
+选民投票：获得管理员批准后，注册用户可以在投票页面上投票给感兴趣的候选人。
 
-然后，管理员将检查注册信息（区块链账户地址、姓名和电话号码）是否有效并与其记录匹配。如果是，则管理员批准注册用户，使他们有资格参与选举并投票给感兴趣的候选人。
+结束选举：管理员结束选举，投票关闭并在结果页面上宣布获胜者，并显示结果。
 
-获得管理员批准后，注册用户（选民）可以在投票页面上投票给感兴趣的候选人。
+设置开发环境
+要求安装以下工具：
 
-一段时间后，根据选举的规模，管理员结束选举。随着选举的结束，投票关闭并在结果页面的顶部宣布获胜者，显示结果。
+Node.js
+Truffle
+Ganache CLI
+Metamask 浏览器扩展程序
+获取要求
+安装 Node.js：从 Node.js 官网 下载并安装 Node.js。
 
-点击这里查看演示。
+安装 Truffle 和 Ganache CLI：使用 npm 全局安装 Truffle 和 Ganache CLI：
 
-设置开发环境 要求 Node.js ，Truffle Ganache（Cli）， Metamask（浏览器扩展程序） 
-
-获取要求 下载并安装NodeJS
-
-从这里下载并安装NodeJS。
-
-使用Node包管理器（npm）安装truffle和ganache-cli
-
+bash
+Copy code
 npm install -g truffle
+npm install -g ganache-cli
+安装 Metamask：从 Metamask 官网 下载并安装 Metamask 浏览器扩展程序。
 
- npm install -g ganache-cli 
+配置项目以进行开发
+克隆仓库：使用以下命令克隆此仓库：
 
-安装metamask浏览器扩展程序
-
-从这里下载并安装metamask。
-
-配置项目以进行开发 克隆这个仓库
-
+bash
+Copy code
 git clone https://github.com/yanzhenf/DappVoting.git
-
 cd dVoting
+运行本地以太坊区块链：使用 Ganache CLI 启动本地以太坊区块链：
 
-运行本地以太坊区块链
+bash
+Copy code
+ganache-cli
+配置 Metamask：在浏览器中配置 Metamask 扩展程序，使用以下详细信息：
 
-ganache-cli 注意：不要关闭ganache-cli（区块链网络需要一直运行）
-
-在浏览器上使用以下详细信息配置metamask
-
-新的RPC URL：http://127.0.0.1:8545（在ganache gui中使用端口：7545，也需要在文件：truffle-config.js中更新）
-
+新的 RPC URL：http://127.0.0.1:8545
 链ID：1337
+使用 Ganache CLI 的私钥导入账户到 Metamask 扩展程序。
+部署智能合约：在 dVoting 目录中使用 Truffle 部署智能合约：
 
-使用ganache-cli的私钥导入账户到浏览器上的metamask扩展程序
+bash
+Copy code
+truffle migrate
+启动开发服务器：进入 client 目录，安装依赖并启动开发服务器：
 
-将智能合约部署到（本地）区块链网络（即ganache-cli）
-
-＃在dVoting目录上 truffle migrate 注意：对于重新部署，请使用truffle migrate --reset
-
-启动开发服务器（前端）
-
+bash
+Copy code
 cd client
 npm install
-npm start 
-如果在npm install期间遇到错误，请注意您可能需要从learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist（这是X64的直接下载链接：aka.ms/vs/17/release/vc_redist.x64.exe）安装Microsoft Visual C++ Redistributable packages。
-
+npm start
+注意事项
+在使用 truffle migrate 部署智能合约时，请确保 Ganache CLI 正在运行。如果需要重新部署，可以使用 truffle migrate --reset 命令。
+如果在 npm install 过程中遇到错误，请安装 Microsoft Visual C++ Redistributable packages。您可以从 Microsoft 官网 下载安装。
+通过以上说明，您可以在本地设置和运行 dVoting 去中心化投票系统的开发环境，并开始进行开发和测试。
