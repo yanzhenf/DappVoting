@@ -1,109 +1,58 @@
-# Decentralised Voting (dVoting)
+去中心化投票（dVoting） 基于以太坊区块链技术的去中心化投票系统。
 
-A decentralised voting system based on [Ethereum blockchain](https://ethereum.org/dapps/) technology.
+系统工作流程 关于应用程序基本工作流程的简要说明。
 
-> This started as a final year project for the IT Degree that I was/am pursuing, now aiming to make this more than that.
+管理员将通过在区块链网络（EVM）上启动/部署系统来创建投票实例，然后创建选举实例并使用填写的选举详情（包括选民投票的候选人）开始选举。
 
-## System Workflow
+然后，可能的选民连接到同一区块链网络以注册成为选民。一旦用户成功注册，他们的相关详细信息将被发送/显示在管理员面板上（即验证页面）。
 
-A brief explanation on the basic workflow of the application.
+然后，管理员将检查注册信息（区块链账户地址、姓名和电话号码）是否有效并与其记录匹配。如果是，则管理员批准注册用户，使他们有资格参与选举并投票给感兴趣的候选人。
 
-- Admin will create a voting instance by launching/deploying the system in a blockchain network (EVM), then create an election instance and start the election with the details of the election filled in (including candidates for voters to vote).
-- Then the likely voters connect to the same blockchain network register to become a voter. Once the users successfully register, their respective details are sent/displayed in the admins' panel (i.e. verification page).
-- The admin then will check if the registration information (blockchain account address, name, and phone number) is valid and matches with his record. If yes, then the admin approves the registered user making them eligible to take part and cast their respective vote in the election.
-- The registered user (voter) following the approval from the admin casts their vote to the candidate of interest (from the voting page).
-- After some time, depending on the scale of the election the admin ends the election. As that happens the voting is closed and the results are displayed announcing the winner at the top of the results page.
+获得管理员批准后，注册用户（选民）可以在投票页面上投票给感兴趣的候选人。
 
-  **See demo [here](https://youtu.be/nh1zfTTrdII "Watch dVoting demo").**
+一段时间后，根据选举的规模，管理员结束选举。随着选举的结束，投票关闭并在结果页面的顶部宣布获胜者，显示结果。
 
----
+点击这里查看演示。
 
-## Setting up the development environment
+设置开发环境 要求 Node.js ，Truffle Ganache（Cli）， Metamask（浏览器扩展程序） 
 
-### Requirements
+获取要求 下载并安装NodeJS
 
-- [Node.js](https://nodejs.org)
-- [Truffle](https://www.trufflesuite.com/truffle)
-- [Ganache](https://github.com/trufflesuite/ganache-cli) (Cli)
-- [Metamask](https://metamask.io/) (Browser Extension)
+从这里下载并安装NodeJS。
 
-#### Getting the requirements
+使用Node包管理器（npm）安装truffle和ganache-cli
 
-1. Download and install **NodeJS**
+npm install -g truffle
 
-   Download and install NodeJS from [here](https://nodejs.org/en/download/ "Go to official NodeJS download page.").
+ npm install -g ganache-cli 
 
-1. Install **truffle** and **ganache-cli** using node packager manager (npm)
+安装metamask浏览器扩展程序
 
-   ```shell
-   npm install -g truffle
-   npm install -g ganache-cli
-   ```
+从这里下载并安装metamask。
 
-1. Install **metamask** browser extension
+配置项目以进行开发 克隆这个仓库
 
-   Download and install metamask from [here](https://metamask.io/download "Go to official metamask download page.").
+git clone https://github.com/arlbibek/dVoting.git 
 
-### Configuring the project for development
+cd dVoting
 
-1. Clone this repository
+ 运行本地以太坊区块链
 
-   ```shell
-   git clone https://github.com/arlbibek/dVoting.git
-   cd dVoting
-   ```
+ganache-cli 注意：不要关闭ganache-cli（区块链网络需要一直运行）
 
-2. Run local Ethereum blockchain
+在浏览器上使用以下详细信息配置metamask
 
-   ```shell
-   ganache-cli
-   ```
+新的RPC URL：http://127.0.0.1:8545（在ganache gui中使用端口：7545，也需要在文件：truffle-config.js中更新）
 
-   > Note: Do not close `ganache-cli` (the blockchain network needs to be running all the time)
+链ID：1337
 
-3. Configure metamask on the browser with the following details
+使用ganache-cli的私钥导入账户到浏览器上的metamask扩展程序
 
-   New RPC URL: `http://127.0.0.1:8545` *(use `port: 7545` for **ganache gui**, update it in the file:`truffle-config.js` as well)*
+将智能合约部署到（本地）区块链网络（即ganache-cli）
 
-   Chain ID: `1337`
+＃在dVoting目录上 truffle migrate 注意：对于重新部署，请使用truffle migrate --reset
 
-4. Import account(s) using private keys from ganache-cli to the metamask extension on the browser
+启动开发服务器（前端）
 
-5. Deploy smart contract to the (local) blockchain network (i.e ganache-cli)
+cd client npm install npm start 如果在npm install期间遇到错误，请注意您可能需要从learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist（这是X64的直接下载链接：aka.ms/vs/17/release/vc_redist.x64.exe）安装Microsoft Visual C++ Redistributable packages。
 
-   ```shell
-   # on the dVoting directory
-   truffle migrate
-   ```
-
-   > Note: Use `truffle migrate --reset` for re-deployments
-
-6. Launch the development server (frontend)
-
-   ```shell
-   cd client
-   npm install
-   npm start
-   ```
-
-   > If you encounter **error** during `npm install`, please note that you might need to install Microsoft Visual C++ Redistributable packages from [learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170) (here is the direct download link for X64: [aka.ms/vs/17/release/vc_redist.x64.exe](https://aka.ms/vs/17/release/vc_redist.x64.exe))
-
-## To-Do List
-
-Possible features to add/improve within the app.
-
-- [ ] **Email Verification**—adding email/phone verification (OTP, etc..) while registering for voters.
-- [ ] **Automated Verification**—adding an automated verification (rather than manually approving by the admin) for the registered users. This could be based on the custom cooperation email, custom list of emails, or custom list of phone numbers, etc.
-- [ ] **Report**—option to generate a report at the end of an election. The report could contain a range of information including the number of people that were eligible to vote, the number of people that participated in the election, a bar-chart/pie-chart showing the election statistics, etc.
-- [ ] **Workflow improvements**—overall workflow improvements (eg. option to add candidates within the election setup page), with overall GUI improvements.
-- [ ] **Multiple election instance**—ability to create multiple election instances without having to re-deploy the smart contract.
-
-## Join us on Discord
-
-[![Join our Discord server!](https://invidget.switchblade.xyz/3jmfdNsHWr)](https://discord.gg/3jmfdNsHWr)
-
-[discord.gg/3jmfdNsHWr](https://discord.gg/3jmfdNsHWr "Join us on Discord!")
-
----
-
-Made with ❤️ by [Bibek Aryal](https://bibeka.com.np/).

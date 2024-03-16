@@ -1,17 +1,17 @@
 const path = require("path");
 
 module.exports = {
-  // See <http://truffleframework.com/docs/advanced/configuration>
-  // to customize your Truffle configuration!
-  contracts_build_directory: path.join(__dirname, "client/src/contracts"),
-  networks: {
-    development: {
-      network_id: "*",
-      host: "127.0.0.1",
-      // port: 7545, // for ganache gui
-      port: 8545, // for ganache-cli
-      gas: 6721975,
-      gasPrice: 20000000000,
+    // 查看 <http://truffleframework.com/docs/advanced/configuration>
+    // 自定义Truffle配置!
+    contracts_build_directory: path.join(__dirname, "client/src/contracts"),
+    networks: {
+        development: {
+            network_id: "*",
+            host: "127.0.0.1",
+            port: 7545, //  ganache 端口
+            //port: 8545, // geth端口
+            gas: 6721975,
+            gasPrice: 20000000000,
+        },
     },
-  },
 };
