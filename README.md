@@ -32,6 +32,7 @@ npm install -g ganache-cli
 克隆仓库：使用以下命令克隆此仓库：
 
 git clone https://github.com/yanzhenf/DappVoting.git
+
 cd dVoting
 
 运行本地以太坊区块链：使用 Ganache CLI 启动本地以太坊区块链：
