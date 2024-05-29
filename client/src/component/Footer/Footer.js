@@ -15,11 +15,11 @@ const Footer = () => (
             查看此项目在{" "}
             <a
                 className="profile"
-                href="https://github.com/yanzhenf/DappVoting.git"
+                href="https://gitee.com/yan-zhenfeng/DappVoting.git"
                 target="_blank"
                 rel="noopener noreferrer"
             >
-              GitHub
+              Gitee
             </a>
             上的链接。
           </p>
