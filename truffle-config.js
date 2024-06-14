@@ -9,7 +9,7 @@ module.exports = {
             network_id: "*",
             host: "127.0.0.1",
             port: 7545, //  ganache 端口
-            //port: 8545, // geth端口
+            // port: 8545, // geth端口
             gas: 6721975,
             gasPrice: 20000000000,
         },

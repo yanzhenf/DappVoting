@@ -1,4 +1,4 @@
-DappVoting - 去中心化投票系统
+ DappVoting - 去中心化投票系统
 DappVoting 是基于以太坊区块链技术的去中心化投票系统，旨在提供安全、透明和可验证的选举过程。以下是系统的工作流程和设置开发环境的详细说明。
 
 系统工作流程
@@ -61,7 +61,7 @@ npm start
 
 注意事项
 在使用 truffle migrate 部署智能合约时，请确保 Ganache CLI 正在运行。
-如果需要重新部署，可以使用 truffle migrate --reset 命令。
+如果需要重新部署，可以使用  truffle migrate --reset命令。
 如果在 npm install 过程中遇到错误，请安装 Microsoft Visual C++ Redistributable packages。
 您可以从 Microsoft 官网 下载安装。
 通过以上说明，您可以在本地设置和运行 dVoting 去中心化投票系统的开发环境，并开始进行开发和测试。

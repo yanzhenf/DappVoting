@@ -30,7 +30,7 @@ const getWeb3 = () =>
         else {
           // 创建一个 HTTP Provider 对象，连接到本地以太坊节点
           const provider = new Web3.providers.HttpProvider(
-              "http://127.0.0.1:8545"
+              "http://127.0.0.1:7545"
           );
           // 创建一个 Web3 实例，使用本地节点提供的 provider
           const web3 = new Web3(provider);

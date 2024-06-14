@@ -1,4 +1,3 @@
-// Node模块
 import React, {Component} from "react";
 import {useForm} from "react-hook-form";
 import {Link} from "react-router-dom";
@@ -31,7 +30,6 @@ export default class Home extends Component {
         };
     }
 
-    // 页面加载后执行的操作
     componentDidMount = async () => {
         if (!window.location.hash) {
             window.location = window.location + "#loaded";
@@ -87,91 +85,63 @@ export default class Home extends Component {
             });
         } catch (error) {
             // 捕获任何可能出现的错误
-            alert(
-                `加载web3、账户或合约失败。请检查控制台以获取详细信息。`
-            );
+            alert(`加载web3、账户或合约失败。请检查控制台以获取详细信息。`);
             console.error(error);
         }
     };
 
     // 结束选举
     endElection = async () => {
-        await this.state.ElectionInstance.methods
-            .endElection()
-            .send({from: this.state.account, gas: 1000000});
-        window.location.reload();
+        try {
+            await this.state.ElectionInstance.methods
+                .endElection()
+                .send({from: this.state.account, gas: 1000000});
+            window.location.reload();
+        } catch (error) {
+            alert("结束选举时出错。");
+            console.error("结束选举时出错:", error);
+        }
+    };
+
+    // 开始选举
+    startElection = async () => {
+        try {
+            await this.state.ElectionInstance.methods
+                .startElection()
+                .send({from: this.state.account, gas: 1000000});
+            window.location.reload();
+        } catch (error) {
+            console.error("开始选举时出错:", error);
+        }
     };
 
     // 注册并开始选举
     registerElection = async (data) => {
-        await this.state.ElectionInstance.methods
-            .setElectionDetails(
-                data.adminFName.toLowerCase() + " " + data.adminLName.toLowerCase(),
-                data.adminEmail.toLowerCase(),
-                data.adminTitle.toLowerCase(),
-                data.electionTitle.toLowerCase(),
-                data.organizationTitle.toLowerCase()
-            )
-            .send({from: this.state.account, gas: 1000000});
-        window.location.reload();
+        try {
+            await this.state.ElectionInstance.methods
+                .setElectionDetails(
+                    data.adminFName.toLowerCase() + " " + data.adminLName.toLowerCase(),
+                    data.adminEmail.toLowerCase(),
+                    data.adminTitle.toLowerCase(),
+                    data.electionTitle.toLowerCase(),
+                    data.organizationTitle.toLowerCase()
+                )
+                .send({from: this.state.account, gas: 1000000});
+            window.location.reload();
+        } catch (error) {
+            alert("注册选举时出错。");
+            console.error("注册选举时出错:", error);
+        }
     };
 
-    render() {
-        if (!this.state.web3) {
-            return (
-                <>
-                    <Navbar/>
-                    <center>加载Web3、账户和合约中...</center>
-                </>
-            );
+    restartElection = async () => {
+        try {
+            await this.state.ElectionInstance.methods.resetElection().send({from: this.state.account});
+            window.location.reload(); // 刷新页面或重新加载必要的数据
+        } catch (error) {
+            console.error("Error restarting election:", error);
         }
-        return (
-            <>
-                {this.state.isAdmin ? <NavbarAdmin/> : <Navbar/>}
-                <div className="container-main">
-                    <div className="container-item center-items info">
-                        您的账户: {this.state.account}
-                    </div>
-                    {!this.state.elStarted & !this.state.elEnded ? (
-                        <div className="container-item info">
-                            <center>
-                                <h3>选举尚未初始化。</h3>
-                                {this.state.isAdmin ? (
-                                    <p>设置选举。</p>
-                                ) : (
-                                    <p>请稍候...</p>
-                                )}
-                            </center>
-                        </div>
-                    ) : null}
-                </div>
-                {this.state.isAdmin ? (
-                    <>
-                        <this.renderAdminHome/>
-                    </>
-                ) : this.state.elStarted ? (
-                    <>
-                        <UserHome el={this.state.elDetails}/>
-                    </>
-                ) : !this.state.isElStarted && this.state.isElEnded ? (
-                    <>
-                        <div className="container-item attention">
-                            <center>
-                                <h3>选举已结束。</h3>
-                                <br/>
-                                <Link
-                                    to="/Results"
-                                    style={{color: "black", textDecoration: "underline"}}
-                                >
-                                    查看结果
-                                </Link>
-                            </center>
-                        </div>
-                    </>
-                ) : null}
-            </>
-        );
-    }
+    };
 
     // 渲染管理员主页
     renderAdminHome = () => {
@@ -194,7 +164,7 @@ export default class Home extends Component {
             return (
                 <div>
                     <form onSubmit={handleSubmit(onSubmit)}>
-                        {!this.state.elStarted & !this.state.elEnded ? (
+                        {!this.state.elStarted && !this.state.elEnded ? (
                             <div className="container-main">
                                 {/* 关于管理员 */}
                                 <div className="about-admin">
@@ -293,7 +263,11 @@ export default class Home extends Component {
                         <StartEnd
                             elStarted={this.state.elStarted}
                             elEnded={this.state.elEnded}
+                            startElFn={this.startElection}
                             endElFn={this.endElection}
+                            contract={this.state.ElectionInstance}
+                            account={this.state.account}
+                            refresh={() => window.location.reload()} // 传递刷新页面的函数
                         />
                         <ElectionStatus
                             elStarted={this.state.elStarted}
@@ -305,4 +279,61 @@ export default class Home extends Component {
         };
         return <AdminHome/>;
     };
+
+    render() {
+        if (!this.state.web3) {
+            return (
+                <>
+                    <Navbar/>
+                    <center>加载Web3、账户和合约中...</center>
+                </>
+            );
+        }
+        return (
+            <>
+                {this.state.isAdmin ? <NavbarAdmin/> : <Navbar/>}
+                <div className="container-main">
+                    <div className="container-item center-items info">
+                        Metamask账户: {this.state.account}
+                    </div>
+                    {!this.state.elStarted && !this.state.elEnded ? (
+                        <div className="container-item info">
+                            <center>
+                                <h3>选举尚未初始化。</h3>
+                                {this.state.isAdmin ? (
+                                    <p>设置选举。</p>
+                                ) : (
+                                    <p>请稍候...</p>
+                                )}
+                            </center>
+                        </div>
+                    ) : null}
+                </div>
+                {this.state.isAdmin ? (
+                    <>
+                        <this.renderAdminHome/>
+                    </>
+                ) : this.state.elStarted ? (
+                    <>
+                        <UserHome el={this.state.elDetails}/>
+                    </>
+                ) : !this.state.elStarted && this.state.elEnded ? (
+                    <>
+                        <div className="container-item attention">
+                            <center>
+                                <h3>选举已结束。</h3>
+                                <br/>
+                                <Link
+                                    to="/Results"
+                                    style={{color: "black", textDecoration: "underline"}}
+                                >
+                                    查看结果
+                                </Link>
+                            </center>
+                        </div>
+                    </>
+                ) : null}
+            </>
+        );
+    }
 }

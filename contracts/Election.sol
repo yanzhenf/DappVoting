@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.21 <0.9.0;
+pragma experimental ABIEncoderV2;
 
 contract Election {
     address public admin; // 管理员地址
@@ -27,33 +28,27 @@ contract Election {
         require(msg.sender == admin);
         _;
     }
-    // 候选人模型
+
     struct Candidate {
         uint256 candidateId; // 候选人ID
         string header; // 头衔
         string slogan; // 口号
         uint256 voteCount; // 票数
     }
+
     mapping(uint256 => Candidate) public candidateDetails; // 候选人详情映射
 
-    // 添加新候选人
-    function addCandidate(string memory _header, string memory _slogan)
-    public
-        // 仅管理员可以添加
-    onlyAdmin
-    {
-        Candidate memory newCandidate =
-                        Candidate({
-                candidateId: candidateCount,
-                header: _header,
-                slogan: _slogan,
-                voteCount: 0
-            });
+    function addCandidate(string memory _header, string memory _slogan) public onlyAdmin {
+        Candidate memory newCandidate = Candidate({
+            candidateId: candidateCount,
+            header: _header,
+            slogan: _slogan,
+            voteCount: 0
+        });
         candidateDetails[candidateCount] = newCandidate;
         candidateCount += 1;
     }
 
-    // 选举详情模型
     struct ElectionDetails {
         string adminName; // 管理员姓名
         string adminEmail; // 管理员邮箱
@@ -61,6 +56,7 @@ contract Election {
         string electionTitle; // 选举标题
         string organizationTitle; // 组织标题
     }
+
     ElectionDetails electionDetails;
 
     function setElectionDetails(
@@ -69,11 +65,7 @@ contract Election {
         string memory _adminTitle,
         string memory _electionTitle,
         string memory _organizationTitle
-    )
-    public
-        // 仅管理员可以设置
-    onlyAdmin
-    {
+    ) public onlyAdmin {
         electionDetails = ElectionDetails(
             _adminName,
             _adminEmail,
@@ -85,18 +77,13 @@ contract Election {
         end = false;
     }
 
-    // 获取选举详情
-    function getElectionDetails()
-    public
-    view
-    returns (
+    function getElectionDetails() public view returns (
         string memory adminName,
         string memory adminEmail,
         string memory adminTitle,
         string memory electionTitle,
         string memory organizationTitle
-    )
-    {
+    ) {
         return (
             electionDetails.adminName,
             electionDetails.adminEmail,
@@ -106,19 +93,14 @@ contract Election {
         );
     }
 
-    // 获取候选人数量
     function getTotalCandidate() public view returns (uint256) {
-        // 返回候选人总数
         return candidateCount;
     }
 
-    // 获取投票者数量
     function getTotalVoter() public view returns (uint256) {
-        // 返回投票者总数
         return voterCount;
     }
 
-    // 投票者模型
     struct Voter {
         address voterAddress; // 投票者地址
         string name; // 姓名
@@ -127,56 +109,86 @@ contract Election {
         bool hasVoted; // 是否投票
         bool isRegistered; // 是否注册
     }
+
     address[] public voters; // 存储投票者地址的数组
     mapping(address => Voter) public voterDetails; // 投票者详情映射
 
-    // 请求注册为投票者
     function registerAsVoter(string memory _name, string memory _phone) public {
-        Voter memory newVoter =
-                        Voter({
-                voterAddress: msg.sender,
-                name: _name,
-                phone: _phone,
-                hasVoted: false,
-                isVerified: false,
-                isRegistered: true
-            });
+        Voter memory newVoter = Voter({
+            voterAddress: msg.sender,
+            name: _name,
+            phone: _phone,
+            hasVoted: false,
+            isVerified: false,
+            isRegistered: true
+        });
         voterDetails[msg.sender] = newVoter;
         voters.push(msg.sender);
         voterCount += 1;
     }
 
-    // 验证投票者
-    function verifyVoter(bool _verifedStatus, address voterAddress)
-    public
-        // 仅管理员可以验证
-    onlyAdmin
-    {
+    function verifyVoter(bool _verifedStatus, address voterAddress) public onlyAdmin {
         voterDetails[voterAddress].isVerified = _verifedStatus;
     }
 
-    // 投票
     function vote(uint256 candidateId) public {
-        require(voterDetails[msg.sender].hasVoted == false);
-        require(voterDetails[msg.sender].isVerified == true);
-        require(start == true);
-        require(end == false);
+        require(!voterDetails[msg.sender].hasVoted, "Already voted");
+        require(voterDetails[msg.sender].isVerified, "Not verified");
+        require(start, "Election not started");
+        require(!end, "Election ended");
+
         candidateDetails[candidateId].voteCount += 1;
         voterDetails[msg.sender].hasVoted = true;
     }
 
-    // 结束选举
     function endElection() public onlyAdmin {
         end = true;
         start = false;
+        // 在结束选举时，记录选举历史
+        addElectionHistory();
     }
 
-    // 获取选举开始和结束值
     function getStart() public view returns (bool) {
         return start;
     }
 
     function getEnd() public view returns (bool) {
         return end;
+    }
+
+    struct ElectionHistory {
+        string electionTitle;
+        string organizationTitle;
+        Candidate winner;
+    }
+
+    ElectionHistory[] public electionHistories;
+
+    function addElectionHistory() internal {
+        Candidate memory winner = candidateDetails[0];
+        for (uint256 i = 1; i < candidateCount; i++) {
+            if (candidateDetails[i].voteCount > winner.voteCount) {
+                winner = candidateDetails[i];
+            }
+        }
+        electionHistories.push(ElectionHistory({
+            electionTitle: electionDetails.electionTitle,
+            organizationTitle: electionDetails.organizationTitle,
+            winner: winner
+        }));
+    }
+
+    function getElectionHistory() public view returns (ElectionHistory[] memory) {
+        return electionHistories;
+    }
+
+    function resetElection() public onlyAdmin {
+        for (uint i = 0; i < candidateCount; i++) {
+            delete candidateDetails[i];
+        }
+        candidateCount = 0;
+        voterCount = 0;
+        start = false;
+        end = false;
     }
 }
