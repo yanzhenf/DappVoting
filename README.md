@@ -1,4 +1,4 @@
- DappVoting - 去中心化投票系统
+DappVoting - 去中心化投票系统
 DappVoting 是基于以太坊区块链技术的去中心化投票系统，旨在提供安全、透明和可验证的选举过程。以下是系统的工作流程和设置开发环境的详细说明。
 
 系统工作流程
@@ -37,7 +37,9 @@ cd dVoting
 
 运行本地以太坊区块链：
 
-                    使用 Ganache CLI 启动本地以太坊区块链：ganache-cli
+    使用 Ganache CLI 启动本地以太坊区块链：ganache-cli
+
+ 注：也可以启动Ganache客户端、或者运行geth来运行本地私有链。
             
 配置 Metamask：在浏览器中配置 Metamask 扩展程序，使用以下详细信息：
 
