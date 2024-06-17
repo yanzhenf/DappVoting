@@ -75,6 +75,15 @@ contract Election {
         );
         start = true;
         end = false;
+
+        // Reset voter status for the new election
+        for (uint i = 0; i < voters.length; i++) {
+            voterDetails[voters[i]].isVerified = false;
+            voterDetails[voters[i]].hasVoted = false;
+            voterDetails[voters[i]].isRegistered = false;
+        }
+        voterCount = 0;
+        delete voters;
     }
 
     function getElectionDetails() public view returns (
@@ -114,12 +123,14 @@ contract Election {
     mapping(address => Voter) public voterDetails; // 投票者详情映射
 
     function registerAsVoter(string memory _name, string memory _phone) public {
+        require(!voterDetails[msg.sender].isRegistered, "Already registered");
+
         Voter memory newVoter = Voter({
             voterAddress: msg.sender,
             name: _name,
             phone: _phone,
             hasVoted: false,
-            isVerified: false,
+            isVerified: false, // Require admin verification
             isRegistered: true
         });
         voterDetails[msg.sender] = newVoter;
@@ -127,8 +138,8 @@ contract Election {
         voterCount += 1;
     }
 
-    function verifyVoter(bool _verifedStatus, address voterAddress) public onlyAdmin {
-        voterDetails[voterAddress].isVerified = _verifedStatus;
+    function verifyVoter(bool _verifiedStatus, address voterAddress) public onlyAdmin {
+        voterDetails[voterAddress].isVerified = _verifiedStatus;
     }
 
     function vote(uint256 candidateId) public {
@@ -190,5 +201,11 @@ contract Election {
         voterCount = 0;
         start = false;
         end = false;
+
+        // Clear voter details
+        for (uint i = 0; i < voters.length; i++) {
+            delete voterDetails[voters[i]];
+        }
+        delete voters;
     }
 }
